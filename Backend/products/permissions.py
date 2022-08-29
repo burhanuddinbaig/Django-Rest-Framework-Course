@@ -1,10 +1,10 @@
 from rest_framework import permissions
 
-class IsOwnerOrReadOnly(permissions.BasePermission):
+class IsOwnerOrReadOnly(permissions.BasePermission):    #is owner Or Read only.
     def has_object_permission(self, request, view, obj):
         return obj.owner == request.user
 
-class IsStaffEditorPermission(permission.DjangoModelPermissions):
+class IsStaffEditorPermission(permissions.DjangoModelPermissions):
     def has_permission(self, request, view):
         user = request.user
         if user.is_staff:
@@ -16,8 +16,5 @@ class IsStaffEditorPermission(permission.DjangoModelPermissions):
                 return True
             if user.has_perm("products.view_product"):
                 return True
-            return False
         print(user.get_all_permissions())
         return False
-    
-    
