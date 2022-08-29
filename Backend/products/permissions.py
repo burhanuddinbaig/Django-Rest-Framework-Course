@@ -4,7 +4,7 @@ class IsOwnerOrReadOnly(permissions.BasePermission):    #is owner Or Read only.
     def has_object_permission(self, request, view, obj):
         return obj.owner == request.user
 
-class IsStaffEditorPermission(permissions.DjangoModelPermissions):
+class IsStaffEditorPermission(permissions.DjangoModelPermissions):  # IsStaffEditorPermission
     def has_permission(self, request, view):
         user = request.user
         if user.is_staff:
