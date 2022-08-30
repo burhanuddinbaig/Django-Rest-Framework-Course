@@ -16,5 +16,5 @@ class IsStaffEditorPermission(permissions.DjangoModelPermissions):  # IsStaffEdi
                 return True
             if user.has_perm("products.view_product"):
                 return True
-        print(user.get_all_permissions())
+        print(user.get_all_permissions())       # to print just permissions
         return False
