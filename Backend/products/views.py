@@ -1,10 +1,8 @@
-from rest_framework import generics, mixins, permissions, authentication
-
-from api.authentication import TokenAuthentication
+from rest_framework import generics, mixins
 
 from .models import Product
-from .permissions import IsStaffEditorPermission
 from .serializers import ProductSerializer
+from .mixins import StaffEditorPermissionMixin
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
@@ -14,7 +12,9 @@ from django.shortcuts import get_object_or_404
 
 # Product Create View
 
-class ProductCreateAPIView(generics.CreateAPIView):
+class ProductCreateAPIView(
+    StaffEditorPermissionMixin,
+    generics.CreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
@@ -28,13 +28,11 @@ class ProductCreateAPIView(generics.CreateAPIView):
 
 product_create_view = ProductCreateAPIView.as_view()
 
-class ProductListCreateAPIView(generics.ListCreateAPIView):
+class ProductListCreateAPIView(
+    StaffEditorPermissionMixin,
+    generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    permission_classes = [
-        permissions.DjangoModelPermissions,
-        IsStaffEditorPermission
-        ]    # to set permissions
 
     def perform_create(self, serializer):
         title = serializer.validated_data.get('title')
@@ -76,7 +74,9 @@ product_mixin_view = ProductMixinView.as_view()
 
 # Product update View
 
-class ProductUpdateAPIView(generics.UpdateAPIView):
+class ProductUpdateAPIView(
+    StaffEditorPermissionMixin,
+    generics.UpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'pk'
@@ -90,7 +90,9 @@ product_update_view = ProductUpdateAPIView.as_view()
 
 # Product delete View
 
-class ProductDestroyAPIView(generics.DestroyAPIView):
+class ProductDestroyAPIView(
+    StaffEditorPermissionMixin,
+    generics.DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     lookup_field = 'pk'
@@ -104,20 +106,13 @@ product_destroy_view = ProductDestroyAPIView.as_view()
 
 # Product Detail View
 
-class ProductDetailAPIView(generics.RetrieveAPIView):
+class ProductDetailAPIView(
+    StaffEditorPermissionMixin,
+    generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
 
 product_detail_view = ProductDetailAPIView.as_view()
-
-# class ProductListAPIView(generics.ListAPIView):
-#     '''
-#     Not gonna use this method
-#     '''
-#     queryset = Product.objects.all()
-#     serializer_class = ProductSerializer
-
-# product_list_view = ProductListAPIView.as_view()
 
 def product_alt_view(request, pk = None, *args, **kwargs):
     method = request.method
