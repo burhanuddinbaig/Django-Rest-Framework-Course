@@ -31,10 +31,6 @@ product_create_view = ProductCreateAPIView.as_view()
 class ProductListCreateAPIView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
-    authentication_classes = [
-        authentication.SessionAuthentication,
-        TokenAuthentication,
-        ]
     permission_classes = [
         permissions.DjangoModelPermissions,
         IsStaffEditorPermission
