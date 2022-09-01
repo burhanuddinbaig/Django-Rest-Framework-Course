@@ -20,6 +20,7 @@ class ProductSerializer(serializers.ModelSerializer):
         ]
 
     def get_url(self, obj):
+        # return f"/api/products/{obj.pk}/"  #to get url
         request = self.context.get('request')
         if request is None:
             return None
